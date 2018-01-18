@@ -1,2 +1,1 @@
-# DependableSystemsPLC
-Repository for the 3rd year Kingston University Dependable systems exercise
+this is an edit to the master readme file
