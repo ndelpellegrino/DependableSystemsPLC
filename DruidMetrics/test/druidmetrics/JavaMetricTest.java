@@ -37,9 +37,6 @@ public class JavaMetricTest {
     public void tearDown() {
     }
 
-    /**
-     * Test of calculateNoOfPhyLines method, of class JavaMetric.
-     */
     @Test
     public void testCalculateNoOfPhyLines() throws Exception {
         System.out.println("calculateNoOfPhyLines");
@@ -47,8 +44,8 @@ public class JavaMetricTest {
         JavaMetric instance = new JavaMetric();
         int expResult = 0;
         int result = instance.calculateNoOfPhyLines(pathFile);
+        System.out.println(result);
         assertEquals(expResult, result);
-        
     }
     
 }
