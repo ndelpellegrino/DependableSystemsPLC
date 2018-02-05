@@ -3,7 +3,7 @@ package druidmetrics;
 
 public interface MetricInterface {
 
-    public int calculateNoOfLines(String code);
+    public int calculateNoOfLines(String pathFile);
     
     
 }
