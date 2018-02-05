@@ -48,4 +48,14 @@ public class JavaMetricTest {
         assertEquals(expResult, result);
     }
     
+    @Test
+    public void testCalculateNoOfEffLines() throws Exception {
+        System.out.println("calculateNoOfEffLines");
+        String pathFile = "src/druidmetrics/Main.java";
+        JavaMetric instance = new JavaMetric();
+        int expResult = 3;
+        int result = instance.calculateNoOfEffLines(pathFile);
+        System.out.println(result);
+        assertEquals(expResult, result);
+    }
 }
