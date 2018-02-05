@@ -7,5 +7,4 @@ public class JavaMetric implements MetricInterface{
         
         return 1;
     }
-    
 }
