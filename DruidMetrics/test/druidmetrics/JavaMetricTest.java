@@ -42,7 +42,7 @@ public class JavaMetricTest {
         System.out.println("calculateNoOfPhyLines");
         String pathFile = "src/druidmetrics/JavaMetric.java";
         JavaMetric instance = new JavaMetric();
-        int expResult = 0;
+        int expResult = 26;
         int result = instance.calculateNoOfPhyLines(pathFile);
         System.out.println(result);
         assertEquals(expResult, result);
