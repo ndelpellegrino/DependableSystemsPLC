@@ -1,8 +1,13 @@
 package druidmetrics;
 import java.io.BufferedInputStream;
+import java.io.BufferedReader;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 public class JavaMetric {
 
@@ -24,28 +29,21 @@ public class JavaMetric {
         }
     }
     
-    public int calculateNoOfEffLines(String pathFile) throws IOException{
-    
-        try (InputStream is = new BufferedInputStream(new FileInputStream(pathFile))) {
-            byte[] c = new byte[1024];
-            int effLinesOfCode = 0;
-            int readChars = 0;
-            boolean empty = true;
-            while ((readChars = is.read(c)) != -1) {
-                empty = false;
-                for(int i = 0; i < readChars; ++i){
-                    if(c[i] == '\t' || c[i] == '}' || c[i] == '{'){
-                        --effLinesOfCode;
-                        System.out.println("Minus 1 line");
-                    }
-                    if (c[i] == '\n') {
-                        ++effLinesOfCode;
-                        System.out.println("Plus 1 line");
-                    } 
-                }
-            }
-            return (effLinesOfCode == 0 && !empty) ? 1 : effLinesOfCode;
+    public int calculateNoOfEffLines(String pathFile) throws FileNotFoundException, IOException {
+        int effLines = 0;
+        List<String> linesOfCode = new ArrayList<>();
+        BufferedReader bufReader = new BufferedReader(new FileReader(pathFile));
+        String line = bufReader.readLine();
+        while(line != null) {
+            linesOfCode.add(line);
+            line = bufReader.readLine();
         }
+        for(String s : linesOfCode) {
+            s = s.trim();
+            if(!s.equals("}") && !s.equals("{") && !s.startsWith("//") && !s.startsWith("/*") && !s.startsWith("*/") && !s.isEmpty())
+                effLines++;   
+        }
+        return effLines;
     }
-
+    
 }
