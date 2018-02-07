@@ -29,6 +29,10 @@ public class JavaMetric {
         }
     }
     
+    //Checks {, }, //, /*, */, empty lines.
+    //Counts only line of code.
+    //Issues with multiple line sof code.
+    //Last Edited: Mohammad
     public int calculateNoOfEffLines(String pathFile) throws FileNotFoundException, IOException {
         int effLines = 0;
         List<String> linesOfCode = new ArrayList<>();
