@@ -10,31 +10,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class JavaMetric {
-
-    public int calculateNoOfPhyLines(String pathFile) throws IOException{
     
-        try (InputStream is = new BufferedInputStream(new FileInputStream(pathFile))) {
-            byte[] c = new byte[1024];
-            int phyLinesOfCode = 0;
-            int readChars = 0;
-            boolean empty = true;
-            while ((readChars = is.read(c)) != -1) {
-                empty = false;
-                for(int i = 0; i < readChars; ++i)
-                    if (c[i] == '\n') {
-                        ++phyLinesOfCode;
-                    }
-            }
-            return (phyLinesOfCode == 0 && !empty) ? 1 : phyLinesOfCode;
-        }
-    }
-    
-    //Checks {, }, //, /*, */, empty lines.
-    //Counts only line of code.
-    //Issues with multiple line sof code.
-    //Last Edited: Mohammad
-    public int calculateNoOfEffLines(String pathFile) throws FileNotFoundException, IOException {
-        int effLines = 0;
+    //Grabs code content from specified path into ArrayList.
+    public List<String> getCodeToList(String pathFile) throws FileNotFoundException, IOException {
         List<String> linesOfCode = new ArrayList<>();
         BufferedReader bufReader = new BufferedReader(new FileReader(pathFile));
         String line = bufReader.readLine();
@@ -42,6 +20,18 @@ public class JavaMetric {
             linesOfCode.add(line);
             line = bufReader.readLine();
         }
+        return linesOfCode;
+    }
+    
+    //Returns number of lines of code
+    public int calculateNoOfPhyLines(List<String> linesOfCode) {
+        int noOfLines = linesOfCode.size();
+        return noOfLines;
+    }
+    
+    //Returns number of Effective lines of code
+    public int calculateNoOfEffLines(List<String> linesOfCode) {
+        int effLines = 0;
         for(String s : linesOfCode) {
             s = s.trim();
             if(!s.equals("}") && !s.equals("{") && !s.startsWith("//") && !s.startsWith("/*") && !s.startsWith("*/") && !s.isEmpty())
