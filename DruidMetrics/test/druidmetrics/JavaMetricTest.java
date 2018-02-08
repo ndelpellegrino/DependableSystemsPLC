@@ -5,6 +5,8 @@
  */
 package druidmetrics;
 
+import java.util.ArrayList;
+import java.util.List;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -37,24 +39,36 @@ public class JavaMetricTest {
     public void tearDown() {
     }
 
-    @Test
-    public void testCalculateNoOfPhyLines() throws Exception {
-        System.out.println("calculateNoOfPhyLines");
+    @Test //Add expResult content
+    public void testGetCodeToList() throws Exception {
+        System.out.println("getCodeToList");
         String pathFile = "src/druidmetrics/JavaMetric.java";
         JavaMetric instance = new JavaMetric();
-        int expResult = 26;
-        int result = instance.calculateNoOfPhyLines(pathFile);
+        List<String> expResult = new ArrayList<>(); 
+        List<String> result = instance.getCodeToList(pathFile);
+        assertEquals(expResult, result);
+    }
+    
+    @Test //PASSED
+    public void testCalculateNoOfPhyLines() throws Exception {
+        System.out.println("calculateNoOfPhyLines");
+        String pathFile = "src/druidmetrics/Main.java";
+        JavaMetric instance = new JavaMetric();
+        int expResult = 13;
+        List<String> codeArray = instance.getCodeToList(pathFile);
+        int result = instance.calculateNoOfPhyLines(codeArray);
         System.out.println(result);
         assertEquals(expResult, result);
     }
     
-    @Test
+    @Test //PASSED
     public void testCalculateNoOfEffLines() throws Exception {
         System.out.println("calculateNoOfEffLines");
         String pathFile = "src/druidmetrics/Main.java";
         JavaMetric instance = new JavaMetric();
         int expResult = 3;
-        int result = instance.calculateNoOfEffLines(pathFile);
+        List<String> codeArray = instance.getCodeToList(pathFile);
+        int result = instance.calculateNoOfEffLines(codeArray);
         System.out.println(result);
         assertEquals(expResult, result);
     }
