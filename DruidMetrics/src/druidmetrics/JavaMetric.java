@@ -23,13 +23,29 @@ public class JavaMetric {
         return linesOfCode;
     }
     
-    //Returns number of lines of code
-    public int calculateNoOfPhyLines(List<String> linesOfCode) {
-        int noOfLines = linesOfCode.size();
-        return noOfLines;
+    //Differentiates a line of code and squashed code
+    //Can be passed to calculateNoOfEffLines (does not accept empty lines) )
+    public List<String> getSortedCodeToList(List<String> linesOfCode) {
+        List<String> output = new ArrayList<>();
+        for(String s : linesOfCode) {
+            String[] snippet = s.split("(?=[{}])|[;]");
+            for(String c : snippet)
+                if(!c.trim().isEmpty())
+                    output.add(c.trim());
+        }
+        //For Testing
+        //for(String g : output)
+          //      System.out.println(g);
+        return output;
     }
     
-    //Returns number of Effective lines of code
+    //Returns number of physical lines of code
+    public int calculateNoOfPhyLines(List<String> linesOfCode) {
+        return linesOfCode.size();
+    }
+    
+    //Returns number of Effective lines of code.
+    //Won't need to check empty lines if using getSortedCodeToList.
     public int calculateNoOfEffLines(List<String> linesOfCode) {
         int effLines = 0;
         for(String s : linesOfCode) {
