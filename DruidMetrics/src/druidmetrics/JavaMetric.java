@@ -31,10 +31,7 @@ public class JavaMetric implements MetricInterface{
         "==", "!=", "&", "^", "|", "&&", "||", "?:", "=", "*=", "/=", "%=", 
         "+=", "-=", "%=", "+=", "-=", "<<=", ">>=", ">>>=", "&=", "^=", "|="};
   
-    public int calculateNoOfLines(String lines){
-    
-        if(1==1){int i = 0;}else if(2==2){int i = 0;}
-        
+    public int calculateNoOfLines(String lines){        
         return 1;
     }
     
