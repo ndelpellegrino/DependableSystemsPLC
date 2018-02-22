@@ -32,6 +32,11 @@ public class JavaMetric implements MetricInterface{
         "==", "!=", "&", "^", "|", "&&", "||", "?:", "=", "*=", "/=", "%=", 
         "+=", "-=", "%=", "+=", "-=", "<<=", ">>=", ">>>=", "&=", "^=", "|="};
     
+    String[] numberOperators = {"++", "--", "~", "+", "-", "!", "new",
+        "*", "/", "%", "<<", ">>", ">>>", "<", "<=", ">", ">=", "instanceof",
+        "==", "!=", "&", "^", "|", "&&", "||", "?:", "=", "*=", "/=", "%=", 
+        "+=", "-=", "%=", "+=", "-=", "<<=", ">>=", ">>>=", "&=", "^=", "|="};
+    
     String[] types = {"byte", "short", "int", "long", "float", "double", "char", "boolean"};
   
     public int calculateNoOfLines(String lines){        
@@ -103,7 +108,7 @@ public class JavaMetric implements MetricInterface{
                         }                        
                     }
                     
-                    // checks if there's a '=' and gets it's index
+                    // gets index of the '='
                     if(foundAssignment){
                         asgnOpIndex = currentLine.indexOf("="); // gets first occurence of '='
                         
@@ -308,8 +313,7 @@ public class JavaMetric implements MetricInterface{
                         if(currentWord.equals(currentReservedWord)){
                             operatorAmount++;
                         }
-                    } 
-                    
+                    }                     
                 }
                 
                 
