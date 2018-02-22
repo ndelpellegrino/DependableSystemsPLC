@@ -5,6 +5,7 @@
  */
 package druidmetrics;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.After;
@@ -69,6 +70,19 @@ public class JavaMetricTest {
         int expResult = 3;
         List<String> codeArray = instance.getCodeToList(pathFile);
         int result = instance.calculateNoOfEffLines(codeArray);
+        System.out.println(result);
+        assertEquals(expResult, result);
+    }
+    
+    @Test
+    public void testCalculateNoOfLoops() throws IOException {
+        System.out.println("calculateNoOfLoops");
+        String pathFile = "src/druidmetrics/Main.java";
+        CyclomaticMetric instance = new CyclomaticMetric();
+        JavaMetric instance2 = new JavaMetric();
+        List<String> sampleCode = instance2.getSortedCodeToList(pathFile);
+        int expResult = 4;
+        int result = instance.calculateNoOfLoops(sampleCode);
         System.out.println(result);
         assertEquals(expResult, result);
     }
