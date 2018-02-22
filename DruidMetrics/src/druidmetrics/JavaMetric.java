@@ -225,7 +225,7 @@ public class JavaMetric implements MetricInterface{
                                             
                                             boolean isLeftNumber = false;
                                             boolean isRightNumber = false;
-
+                                            
                                             try{
                                                 // check if number
                                                 double d = Double.parseDouble(Character.toString(trimmedLine.charAt(indexBeforeOperator)));
