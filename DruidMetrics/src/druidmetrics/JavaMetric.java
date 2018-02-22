@@ -56,10 +56,14 @@ public class JavaMetric implements MetricInterface{
                 
                 ArrayList<String> listOfLines = new ArrayList<>();
                 
+                int currentStartIndex = 0;
+                int position = 0;
                 // split semi-colons
                 for(char currentChar : charsOnLine){   
                     if(Character.toString(currentChar).equals(";")){
-                        listOfLines.add(line.substring(0, currentChar));
+                        listOfLines.add(line.substring(currentStartIndex, currentChar));
+                        position++;
+                        currentStartIndex = position;
                     }
                 }
                 
