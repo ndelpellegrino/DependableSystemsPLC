@@ -1,4 +1,5 @@
 package druidmetrics;
+import com.sun.xml.internal.ws.util.StringUtils;
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.FileInputStream;
@@ -30,6 +31,8 @@ public class JavaMetric implements MetricInterface{
         "*", "/", "%", "<<", ">>", ">>>", "<", "<=", ">", ">=", "instanceof",
         "==", "!=", "&", "^", "|", "&&", "||", "?:", "=", "*=", "/=", "%=", 
         "+=", "-=", "%=", "+=", "-=", "<<=", ">>=", ">>>=", "&=", "^=", "|="};
+    
+    String[] types = {"byte", "short", "int", "long", "float", "double", "char", "boolean"};
   
     public int calculateNoOfLines(String lines){        
         return 1;
@@ -37,9 +40,96 @@ public class JavaMetric implements MetricInterface{
     
     // Halstead metrics
     
-    public int calculateNoOfOperands(String pathFile) throws IOException{
-        // counts reserved words, operators        
+    public ArrayList<String> getListOfIdentifiers(String pathFile){ 
         String line;
+        
+        try(
+            InputStream fis = new FileInputStream(pathFile);
+            InputStreamReader isr = new InputStreamReader(fis, Charset.forName("UTF-8"));
+            BufferedReader br = new BufferedReader(isr);
+        ){
+            ArrayList<String> listOfIdentifiers = new ArrayList<>();
+            
+            // start reading file line by line            
+            while ((line = br.readLine()) != null) {                
+                char[] charsOnLine = line.toCharArray(); // used to iterate
+                
+                ArrayList<String> listOfLines = new ArrayList<>();
+                
+                // split semi-colons
+                for(char currentChar : charsOnLine){   
+                    if(Character.toString(currentChar).equals(";")){
+                        listOfLines.add(line.substring(0, currentChar));
+                    }
+                }
+                
+                // check semi-colon lines for identifiers
+                for(String currentLine : listOfLines){
+                    char[] currentLineArray = currentLine.toCharArray();
+                    
+                    // remove all beginning spaces
+                    int afterSpacesIndex = 0;
+                    for(char currentChar : currentLineArray){
+                        afterSpacesIndex++;
+                        if(currentChar != ' '){
+                            break;
+                        }
+                    }
+                        
+                    int asgnOpIndex = 0;                    
+                    
+                    boolean foundAssignment = false;
+                    if(currentLine.contains("=")){
+                        int indexOfAssign = currentLine.indexOf("=");                    
+
+                        // check it's not part of an operator that includes '='
+                        if(currentLine.charAt(indexOfAssign - 1) != '<' && 
+                                currentLine.charAt(indexOfAssign - 1) != '>' && 
+                                currentLine.charAt(indexOfAssign - 1) != '=' && 
+                                currentLine.charAt(indexOfAssign - 1) != '!' && 
+                                currentLine.charAt(indexOfAssign - 1) != '*' && 
+                                currentLine.charAt(indexOfAssign - 1) != '/' && 
+                                currentLine.charAt(indexOfAssign - 1) != '%' && 
+                                currentLine.charAt(indexOfAssign - 1) != '+' && 
+                                currentLine.charAt(indexOfAssign - 1) != '-' && 
+                                currentLine.charAt(indexOfAssign - 1) != '&' && 
+                                currentLine.charAt(indexOfAssign - 1) != '^' && 
+                                currentLine.charAt(indexOfAssign - 1) != '|'){
+                            foundAssignment = true;
+                        }                        
+                    }
+                    
+                    // checks if there's a '=' and gets it's index
+                    if(foundAssignment){
+                        asgnOpIndex = currentLine.indexOf("="); // gets first occurence of '='
+                        
+                        String beforeAsgnOp = currentLine.substring(afterSpacesIndex, asgnOpIndex);
+                        
+                        int numberOfSpaces = beforeAsgnOp.length() - line.replace(" ", "").length();                        
+                        
+                        // there are definitely 2 words
+                        if(numberOfSpaces == 2){ 
+                            listOfIdentifiers.add(beforeAsgnOp.substring(beforeAsgnOp.indexOf(" " + 1), beforeAsgnOp.length() - 2));
+                        }
+                        // defintely 2 words, and the space is inbetween the words
+                        else if(numberOfSpaces == 1 && !(beforeAsgnOp.charAt(asgnOpIndex - 1) == ' ')){                            
+                            listOfIdentifiers.add(beforeAsgnOp.substring(beforeAsgnOp.indexOf(" " + 1), beforeAsgnOp.length() - 1));
+                        }                        
+                    }
+                }
+            }     
+            return listOfIdentifiers;
+        }
+        catch(Exception e){
+            return new ArrayList<String>();            
+        }        
+    }
+    
+    public int calculateNoOfOperands(String pathFile) throws IOException{
+        // counts identifiers, numbers, chars, and strings      
+        String line;
+        
+        ArrayList<String> listOfIdentifiers = getListOfIdentifiers(pathFile);
         
         try(
             InputStream fis = new FileInputStream(pathFile);
