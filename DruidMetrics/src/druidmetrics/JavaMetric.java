@@ -135,7 +135,7 @@ public class JavaMetric implements MetricInterface{
     }
     
     public int calculateNoOfOperands(String pathFile) throws IOException{
-        // counts identifiers, numbers, chars, and strings      
+        // counts identifiers, numbers, arrays, chars, and strings      
         String line;
         
         ArrayList<String> listOfIdentifiers = getListOfIdentifiers(pathFile);
@@ -211,6 +211,66 @@ public class JavaMetric implements MetricInterface{
                                     operatorAmount++;
                                     currentString = "";
                                     foundMultipleCharacters = false; 
+                                    
+                                    if(currentMatch.equals(".")){
+                                        break;
+                                    }
+                                    else{
+                                        String trimmedLine = line.trim();
+                                        int trimmedPosition = positionInList - (line.length() - trimmedLine.length());
+                                        
+                                        // only check one side
+                                        if(currentMatch.equals("++") || currentMatch.equals("--") || currentMatch.equals("~")){
+                                            int indexBeforeOperator = trimmedPosition - currentMatch.length() - 1;
+                                            
+                                            boolean isLeftNumber = false;
+                                            boolean isRightNumber = false;
+
+                                            try{
+                                                // check if number
+                                                double d = Double.parseDouble(Character.toString(trimmedLine.charAt(indexBeforeOperator)));
+                                                isLeftNumber = true;
+                                            }
+                                            catch(Exception e){                                                
+                                            }
+                                            try{
+                                                // check if number
+                                                double d = Double.parseDouble(Character.toString(trimmedLine.charAt(trimmedPosition + 1)));
+                                                isRightNumber = true;
+                                            }
+                                            catch(Exception e){                                                
+                                            }
+                                            
+                                            int numberFindPosition = trimmedPosition;                                            
+                                            if(isLeftNumber){
+                                                // start iterating left
+                                                
+                                                String entireNumberString = "";
+                                                for(int i = indexBeforeOperator; i > 0; i--){
+                                                    char currentNumChar = trimmedLine.charAt(i);
+                                                    if(currentNumChar != '.'){                                                        
+                                                        try{
+                                                            double d = Double.parseDouble(Character.toString(currentNumChar));
+
+                                                            entireNumberString = entireNumberString.concat(Character.toString(currentNumChar));
+                                                        }
+                                                        catch(Exception e){
+                                                        }                                                        
+                                                    }
+                                                }
+                                                
+                                            }
+                                            else if(isRightNumber){
+                                                // start iterating right
+                                                
+                                            }
+                                        }
+                                        // check both sides
+                                        else{
+                                            
+                                        }
+                                    }
+                                    
                                     break;
                                 }
                             }        
