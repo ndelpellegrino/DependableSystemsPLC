@@ -138,13 +138,13 @@ public class JavaMetric implements MetricInterface{
         // counts identifiers, numbers, arrays, chars, and strings      
         String line;
         
-        ArrayList<String> listOfIdentifiers = getListOfIdentifiers(pathFile);
-        
         try(
             InputStream fis = new FileInputStream(pathFile);
             InputStreamReader isr = new InputStreamReader(fis, Charset.forName("UTF-8"));
             BufferedReader br = new BufferedReader(isr);
         ){
+            int numberAmount = 0;
+            
             int operatorAmount = 0;
             
             // start reading file line by line            
@@ -153,13 +153,16 @@ public class JavaMetric implements MetricInterface{
                 
                 // checks the line for reserved words
                 
-                String[] wordsOnLine = line.split(" "); // Split line into seperate words
+                line = line.replaceAll("\t", ""); // removes tab character constants
                 
+                String[] wordsOnLine = line.split(" "); // Split line into seperate words
+                                
                 for(String currentWord : wordsOnLine){
-                    if(Arrays.stream(reservedWords).parallel().anyMatch(currentWord::contains)){
-                        operatorAmount++;                        
-                    }           
-                    
+                    for(String currentIdentifier : getListOfIdentifiers(pathFile)){
+                        if(currentWord.equals(currentIdentifier)){
+                            operatorAmount++;
+                        }
+                    }                     
                 }
                 
                 
@@ -173,9 +176,29 @@ public class JavaMetric implements MetricInterface{
                 ArrayList<String> listOfMatches = new ArrayList<>();
                 boolean foundMultipleCharacters = false;
 
+                boolean followingNumber = false;
                 
                 int positionInList = 0;
-                for(char currentChar : charsOnLine){                        
+                for(char currentChar : charsOnLine){
+                    if(currentChar != '.'){
+                        if(followingNumber){                        
+                            try{
+                                double d = Double.parseDouble(Character.toString(currentChar));
+                                followingNumber = true;
+                            }
+                            catch(Exception e){
+                                followingNumber = false;
+                                numberAmount++;
+                            }
+                        }
+                        try{
+                            double d = Double.parseDouble(Character.toString(currentChar));
+                            followingNumber = true;
+                        }
+                        catch(Exception e){                        
+                        }                        
+                    }
+                    
                     // continues a chain of characters
                     if(foundMultipleCharacters){
                         String combinedChars = currentString.concat(Character.toString(currentChar));
@@ -211,66 +234,6 @@ public class JavaMetric implements MetricInterface{
                                     operatorAmount++;
                                     currentString = "";
                                     foundMultipleCharacters = false; 
-                                    
-                                    if(currentMatch.equals(".")){
-                                        break;
-                                    }
-                                    else{
-                                        String trimmedLine = line.trim();
-                                        int trimmedPosition = positionInList - (line.length() - trimmedLine.length());
-                                        
-                                        // only check one side
-                                        if(currentMatch.equals("++") || currentMatch.equals("--") || currentMatch.equals("~")){
-                                            int indexBeforeOperator = trimmedPosition - currentMatch.length() - 1;
-                                            
-                                            boolean isLeftNumber = false;
-                                            boolean isRightNumber = false;
-                                            
-                                            try{
-                                                // check if number
-                                                double d = Double.parseDouble(Character.toString(trimmedLine.charAt(indexBeforeOperator)));
-                                                isLeftNumber = true;
-                                            }
-                                            catch(Exception e){                                                
-                                            }
-                                            try{
-                                                // check if number
-                                                double d = Double.parseDouble(Character.toString(trimmedLine.charAt(trimmedPosition + 1)));
-                                                isRightNumber = true;
-                                            }
-                                            catch(Exception e){                                                
-                                            }
-                                            
-                                            int numberFindPosition = trimmedPosition;                                            
-                                            if(isLeftNumber){
-                                                // start iterating left
-                                                
-                                                String entireNumberString = "";
-                                                for(int i = indexBeforeOperator; i > 0; i--){
-                                                    char currentNumChar = trimmedLine.charAt(i);
-                                                    if(currentNumChar != '.'){                                                        
-                                                        try{
-                                                            double d = Double.parseDouble(Character.toString(currentNumChar));
-
-                                                            entireNumberString = entireNumberString.concat(Character.toString(currentNumChar));
-                                                        }
-                                                        catch(Exception e){
-                                                        }                                                        
-                                                    }
-                                                }
-                                                
-                                            }
-                                            else if(isRightNumber){
-                                                // start iterating right
-                                                
-                                            }
-                                        }
-                                        // check both sides
-                                        else{
-                                            
-                                        }
-                                    }
-                                    
                                     break;
                                 }
                             }        
@@ -330,8 +293,8 @@ public class JavaMetric implements MetricInterface{
                     
                     positionInList++;
                     
-                    if(foundMultipleCharacters && positionInList == charsOnLine.length){
-                        operatorAmount++;
+                    if(foundMultipleCharacters && positionInList == charsOnLine.length && listOfMatches.size() > 0){
+                        operatorAmount++;     
                     }
                     
                     listOfMatches = new ArrayList<>();
@@ -500,4 +463,261 @@ public class JavaMetric implements MetricInterface{
             return 0;
         }
     }
+    
+//    public int calculateNoOfOperands(String pathFile) throws IOException{
+//    // counts identifiers, numbers, arrays, chars, and strings      
+//    String line;
+//
+//    ArrayList<String> listOfIdentifiers = getListOfIdentifiers(pathFile);
+//
+//    try(
+//        InputStream fis = new FileInputStream(pathFile);
+//        InputStreamReader isr = new InputStreamReader(fis, Charset.forName("UTF-8"));
+//        BufferedReader br = new BufferedReader(isr);
+//    ){
+//        int operatorAmount = 0;
+//
+//        // start reading file line by line            
+//        while ((line = br.readLine()) != null) {
+//
+//
+//            // checks the line for reserved words
+//
+//            String[] wordsOnLine = line.split(" "); // Split line into seperate words
+//
+//            for(String currentWord : wordsOnLine){
+//                if(Arrays.stream(reservedWords).parallel().anyMatch(currentWord::contains)){
+//                    operatorAmount++;                        
+//                }           
+//
+//            }
+//
+//
+//
+//            // checks the line for operators
+//
+//            char[] charsOnLine = line.toCharArray(); // used to iterate
+//
+//            // used to manage multi-character operators
+//            String currentString = "";
+//            ArrayList<String> listOfMatches = new ArrayList<>();
+//            boolean foundMultipleCharacters = false;
+//
+//
+//            int positionInList = 0;
+//            for(char currentChar : charsOnLine){                        
+//                // continues a chain of characters
+//                if(foundMultipleCharacters){
+//                    String combinedChars = currentString.concat(Character.toString(currentChar));
+//
+//                    boolean foundCombinedChars = false;
+//
+//                    if(combinedChars.equals("//")){
+//                        break;
+//                    }
+//
+//                    // check to see if it matches an operator
+//                    for(String currentOperator : operators){
+//                        if(currentOperator.contains(combinedChars)){
+//                            currentString = combinedChars;
+//                            foundCombinedChars = true;
+//                            break;
+//                        }
+//                    }
+//
+//                    if(!foundCombinedChars){ // check to see that the old string matched                       
+//                        String oldCharAsString = combinedChars.substring(0, combinedChars.length()-1);
+//
+//                        ArrayList<String> oldListOfMatches = new ArrayList<>();
+//
+//                        for(String currentOperator : operators){
+//                            if(currentOperator.contains(oldCharAsString)){
+//                                oldListOfMatches.add(currentOperator);
+//                            }
+//                        }
+//
+//                        for(String currentMatch : oldListOfMatches){
+//                            if(currentMatch.equals(oldCharAsString)){
+//                                operatorAmount++;
+//                                currentString = "";
+//                                foundMultipleCharacters = false; 
+//
+//                                if(currentMatch.equals(".")){
+//                                    break;
+//                                }
+//                                else{                                        
+//                                    // only check one side
+//                                    if(currentMatch.equals("++") || currentMatch.equals("--") || currentMatch.equals("~")){
+//                                        int indexOfLeftOperand = 0;
+//
+//                                        boolean lookingForLeftOperand = false;
+//                                        boolean lookingForRightOperand = false;
+//
+//                                        // looks through whitespace for operand
+//                                        for(indexOfLeftOperand = positionInList - currentMatch.length(); indexOfLeftOperand > 0; indexOfLeftOperand--){
+//                                            // the operand is on another line
+//                                            if(indexOfLeftOperand <= line.length()){
+//                                                if(line.charAt(indexOfLeftOperand) != ' '){
+//                                                    break;
+//                                                }
+//                                                indexOfLeftOperand--;
+//                                            }
+//                                            else{
+//                                                lookingForLeftOperand = true;
+//                                            }
+//
+//                                        }
+//
+//                                        int indexOfRightOperand = 0;
+//
+//                                        // looks through whitespace for operand
+//                                        for(indexOfRightOperand = positionInList; indexOfRightOperand < line.length(); indexOfRightOperand++){
+//                                            // the operand is on another line
+//                                            if(indexOfRightOperand <= line.length()){
+//                                                if(line.charAt(indexOfRightOperand) != ' '){
+//                                                    break;
+//                                                }
+//                                                indexOfRightOperand++;                                                    
+//                                            }
+//                                            else{
+//                                                lookingForRightOperand = true;
+//                                            }
+//                                        }                                            
+//
+//                                        boolean isLeftNumber = false;
+//                                        boolean isRightNumber = false;
+//
+//                                        try{
+//                                            // check if number
+//                                            double d = Double.parseDouble(Character.toString(line.charAt(indexOfLeftOperand)));
+//                                            isLeftNumber = true;
+//                                        }
+//                                        catch(Exception e){
+//                                        }
+//                                        try{
+//                                            // check if number
+//                                            double d = Double.parseDouble(Character.toString(line.charAt(indexOfRightOperand)));
+//                                            isRightNumber = true;
+//                                        }
+//                                        catch(Exception e){                                                
+//                                        }
+//
+//                                        if(isLeftNumber){
+//                                            // start iterating left
+//                                            String entireNumberString = "";
+//
+//                                            for(int i = indexOfLeftOperand; i > 0; i--){
+//                                                char currentNumChar = line.charAt(i);
+//                                                if(currentNumChar != '.'){                                                        
+//                                                    try{
+//                                                        double d = Double.parseDouble(Character.toString(currentNumChar));
+//
+//                                                        entireNumberString = entireNumberString.concat(Character.toString(currentNumChar));
+//                                                    }
+//                                                    catch(Exception e){
+//                                                    }                                                        
+//                                                }
+//                                            }
+//
+//                                            entireNumberString = new StringBuilder(entireNumberString).reverse().toString();
+//                                        }
+//                                        else if(isRightNumber){
+//                                            // start iterating right                                        
+//                                            String entireNumberString = "";
+//
+//                                            for(int i = indexOfRightOperand; i < line.length(); i++){
+//                                                char currentNumChar = line.charAt(i);
+//                                                if(currentNumChar != '.'){                                                        
+//                                                    try{
+//                                                        double d = Double.parseDouble(Character.toString(currentNumChar));
+//
+//                                                        entireNumberString = entireNumberString.concat(Character.toString(currentNumChar));
+//                                                    }
+//                                                    catch(Exception e){
+//                                                    }                                                        
+//                                                }
+//                                            }                                                      
+//                                        }
+//                                    }
+//                                    // check both sides
+//                                    else{
+//
+//                                    }
+//                                }
+//
+//                                break;
+//                            }
+//                        }        
+//
+//
+//                        // else keep looking
+//                        currentString = Character.toString(currentChar);
+//
+//                        // check to see if it matches an operator
+//                        for(String currentOperator : operators){
+//                            if(currentOperator.contains(currentString)){
+//                                listOfMatches.add(currentOperator);
+//                            }
+//                        }
+//
+//                        if(listOfMatches.size() == 1){                            
+//                            for(String currentMatch : listOfMatches){
+//                                if(currentMatch.equals(currentString)){
+//                                    operatorAmount++;
+//                                    currentString = "";
+//                                    foundMultipleCharacters = false;                                    
+//                                }
+//                            }                        
+//                        }
+//                    }
+//                }                    
+//                if(!foundMultipleCharacters){
+//                    currentString = Character.toString(currentChar);
+//
+//                    // check to see if it matches an operator
+//                    for(String currentOperator : operators){
+//                        if(currentOperator.contains(currentString)){
+//                            listOfMatches.add(currentOperator);
+//                        }
+//                    }                        
+//
+//                    if(listOfMatches.size() == 1){
+//                        for(String currentMatch : listOfMatches){
+//                            if(currentMatch.length() == 1){
+//                                operatorAmount++;                                    
+//                            }
+//                            else{
+//                                foundMultipleCharacters = true;             
+//                                currentString = Character.toString(currentChar);                                    
+//                            }
+//                        }
+//                    }
+//                    else if(listOfMatches.size() > 1){ // multiple matches == possibly multiple characters 
+//                        foundMultipleCharacters = true;             
+//                        currentString = Character.toString(currentChar);   
+//                    }
+//
+//                    if(listOfMatches.size() == 0 && !foundMultipleCharacters){
+//                        // is not an operator in any way
+//                    }
+//                }
+//
+//                positionInList++;
+//
+//                if(foundMultipleCharacters && positionInList == charsOnLine.length){
+//                    operatorAmount++;
+//                }
+//
+//                listOfMatches = new ArrayList<>();
+//            }
+//        }
+//
+//        System.out.println(operatorAmount);
+//
+//        return operatorAmount;
+//    } 
+//    catch(Exception e){
+//        return 0;
+//    }
+//}
 }
