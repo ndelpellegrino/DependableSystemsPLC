@@ -10,12 +10,36 @@ public class CyclomaticMetric {
     public int calculateNoOfLoops(List<String> noOfLines) {
         int noOfLoops = 0;
         for(String s : noOfLines) {
-            if(s.replaceAll(" ", "").contains("for(") || s.replaceAll(" ", "").contains("while(") && !s.trim().startsWith("//")) {
-                System.out.println(s);
+            if(s.replaceAll(" ", "").contains("for(") || s.replaceAll(" ", "").contains("while(") && !s.trim().startsWith("//"))
                 noOfLoops++;
-            }
         }
         return noOfLoops;
     }     
+    
+    //Need to test
+    //returns number of return statements
+    //Won't have to check for comments, as getSortedCodeToList ignores them.
+    public int calculateNoOfReturns(List<String> noOfLines) {
+        int noOfReturns = 0;
+        for(String s : noOfLines) {
+            if(s.trim().replaceAll(" ", "").startsWith("return"))
+                noOfReturns++;
+        }
+        return noOfReturns;
+    }
+    
+    //Need to test
+    //returns number of conditions
+    //Acceptable Conditions: if, else-if, switch
+    //Possible improvements: ternary operator, 
+    public int calculateNoOfConditions(List<String> noOfLines) {
+        int noOfConditions = 0;
+        for(String s : noOfLines) {
+            s = s.replaceAll(" ", "");
+            if(s.contains("if(") || s.contains("elseif(") || s.contains("switch("))
+                noOfConditions++;
+        }
+        return noOfConditions;
+    }
     
 }
