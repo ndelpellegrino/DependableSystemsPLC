@@ -26,8 +26,8 @@ public class JavaMetric implements MetricInterface{
 
     // found at https://docstore.mik.ua/orelly/java-ent/jnut/ch02_05.htm
     // bracket operators ([] and ()) not included
-    String[] operators = {".", "++", "--", "+", "-", "~", "!", "new",
-        "*", "/", "%", "<<", ">>", ">>>", "<", "<=", ">", ">=", "instanceof",
+    String[] operators = {".", "++", "--", "+", "-", "~", "!",
+        "*", "/", "%", "<<", ">>", ">>>", "<", "<=", ">", ">=",
         "==", "!=", "&", "^", "|", "&&", "||", "?:", "=", "*=", "/=", "%=", 
         "+=", "-=", "%=", "+=", "-=", "<<=", ">>=", ">>>=", "&=", "^=", "|="};
     
@@ -247,12 +247,18 @@ public class JavaMetric implements MetricInterface{
                     
                     positionInList++;
                     
-                    if(foundMultipleCharacters && positionInList == charsOnLine.length && listOfMatches.size() > 0){
-                        operatorAmount++;     
+                    if(foundMultipleCharacters && positionInList == charsOnLine.length){
+                        for(String currentOperator : operators){
+                            if(currentString.equals(currentOperator)){
+                                operatorAmount++;
+                                break;
+                            }
+                        }
                     }
                     
                     listOfMatches = new ArrayList<>();
                 }
+                int tempInt = 0;
             }
             
             System.out.println(operatorAmount);
