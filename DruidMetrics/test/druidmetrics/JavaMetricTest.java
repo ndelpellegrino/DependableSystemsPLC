@@ -14,6 +14,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.junit.Ignore;
 
 /**
  *
@@ -40,50 +41,20 @@ public class JavaMetricTest {
     public void tearDown() {
     }
 
-    @Test //Add expResult content
-    public void testGetCodeToList() throws Exception {
-        System.out.println("getCodeToList");
-        String pathFile = "src/druidmetrics/JavaMetric.java";
-        JavaMetric instance = new JavaMetric();
-        List<String> expResult = new ArrayList<>(); 
-        List<String> result = instance.getCodeToList(pathFile);
-        assertEquals(expResult, result);
-    }
-    
+    //SortedCodeToList must be passed to calculateNoEfflines()
+    //for correct behaviour
     @Test //PASSED
-    public void testCalculateNoOfPhyLines() throws Exception {
-        System.out.println("calculateNoOfPhyLines");
-        String pathFile = "src/druidmetrics/Main.java";
-        JavaMetric instance = new JavaMetric();
-        int expResult = 13;
-        List<String> codeArray = instance.getCodeToList(pathFile);
-        int result = instance.calculateNoOfPhyLines(codeArray);
-        System.out.println(result);
-        assertEquals(expResult, result);
-    }
-    
-    @Test //PASSED
-    public void testCalculateNoOfEffLines() throws Exception {
+    public void testCalclateNoEfflines() throws Exception {
         System.out.println("calculateNoOfEffLines");
         String pathFile = "src/druidmetrics/Main.java";
         JavaMetric instance = new JavaMetric();
-        int expResult = 3;
+        int expResult = 12;
         List<String> codeArray = instance.getCodeToList(pathFile);
-        int result = instance.calculateNoOfEffLines(codeArray);
+        List<String> finalArray = instance.getSortedCodeToList(codeArray);
+        int result = instance.calculateNoOfEffLines(finalArray);
         System.out.println(result);
         assertEquals(expResult, result);
     }
     
-    @Test
-    public void testCalculateNoOfLoops() throws IOException {
-        System.out.println("calculateNoOfLoops");
-        String pathFile = "src/druidmetrics/Main.java";
-        CyclomaticMetric instance = new CyclomaticMetric();
-        JavaMetric instance2 = new JavaMetric();
-        List<String> sampleCode = instance2.getSortedCodeToList(pathFile);
-        int expResult = 4;
-        int result = instance.calculateNoOfLoops(sampleCode);
-        System.out.println(result);
-        assertEquals(expResult, result);
-    }
+    
 }
