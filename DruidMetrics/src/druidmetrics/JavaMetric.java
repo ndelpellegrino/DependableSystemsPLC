@@ -26,15 +26,14 @@ public class JavaMetric {
     //Differentiates a line of code and squashed code
     //Can be passed to calculateNoOfEffLines (does not accept empty lines) )
     //First if statement removes comments, won't be added to output.
-    public List<String> getSortedCodeToList(String pathFile) throws IOException {
+    public List<String> getSortedCodeToList(List<String> linesOfCode) throws IOException {
         List<String> output = new ArrayList<>();
-        List<String> snippetCode = getCodeToList(pathFile);
-        for(String s : snippetCode) {
+        for(String s : linesOfCode) {
             if(!s.replaceAll(" ", "").startsWith("//")) {
                 String[] snippet = s.split("(?=[{}])|[;]");
                 for(String c : snippet)
                     if(!c.trim().isEmpty())
-                    output.add(c.trim());
+                        output.add(c.trim());
             }
         }
         return output;
@@ -50,12 +49,12 @@ public class JavaMetric {
     public int calculateNoOfEffLines(List<String> linesOfCode) {
         int effLines = 0;
         for(String s : linesOfCode) {
-            s = s.trim();
+            s = s.trim(); 
             if(!s.equals("}") && !s.equals("{") && !s.startsWith("//") && !s.startsWith("/*") && !s.startsWith("*/") && !s.isEmpty())
-                System.out.println(s);
                 effLines++;   
         }
         return effLines;
     }
+
     
 }
