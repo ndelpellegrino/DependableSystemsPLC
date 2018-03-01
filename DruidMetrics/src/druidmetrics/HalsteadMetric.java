@@ -14,4 +14,15 @@ import java.io.IOException;
 public interface HalsteadMetric {
     public int calculateNoOfOperands(String pathFile) throws IOException;    
     public int calculateNoOfOperators(String pathFile);    
+    public int calculateNoOfUniqueOperands(String pathFile) throws IOException;    
+    public int calculateNoOfUniqueOperators(String pathFile);
+    
+    public int calculateVocabularySize(int uniqueOperandAmount, int uniqueOperatorAmount);    
+    public int calculateProgramLevel(double difficultyLevel);    
+    public int calculateProgramLength(int operandAmount, int operatorAmount);    
+    public int calculateImplementationTime(double effortToImplement);    
+    public int calculateVolume(int vocabularySize, int programLength);    
+    public int calculateEstimatedNoBugs(double effortToImplement);    
+    public int calculateDifficultyLevel(int uniqueOperatorAmount, int operandAmount, int uniqueOperandAmount);    
+    public int calculateEffortToImplement(double programVolume, double difficultyLevel);
 }
