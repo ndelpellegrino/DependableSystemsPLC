@@ -16,6 +16,15 @@ public class CyclomaticMetric {
         return noOfLoops;
     }     
     
+    public int calculateNoOfExceptions(List<String> noOfLines) {
+        int noOfExceptions = 0;
+        for(String s : noOfLines) {
+            if(s.replaceAll(" ", "").contains("throws") || s.replaceAll(" ", "").contains("catch") && !s.trim().startsWith("//"))
+                return noOfExceptions++;
+        }
+        return noOfExceptions;
+    }
+    
     //Need to test
     //returns number of return statements
     //Won't have to check for comments, as getSortedCodeToList ignores them.
