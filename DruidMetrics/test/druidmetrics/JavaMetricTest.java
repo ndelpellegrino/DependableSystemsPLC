@@ -46,9 +46,9 @@ public class JavaMetricTest {
     @Test //PASSED
     public void testCalclateNoEfflines() throws Exception {
         System.out.println("calculateNoOfEffLines");
-        String pathFile = "src/druidmetrics/Main.java";
-        JavaMetric instance = new JavaMetric();
-        int expResult = 12;
+        String pathFile = "src/druidmetrics/codeTest.txt";
+        BaseMetric instance = new BaseMetric();
+        int expResult = 7;
         List<String> codeArray = instance.getCodeToList(pathFile);
         List<String> finalArray = instance.getSortedCodeToList(codeArray);
         int result = instance.calculateNoOfEffLines(finalArray);

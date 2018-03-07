@@ -1,0 +1,10 @@
+public int calculateNoOfEffLines(List<String> linesOfCode) {
+        int effLines = 0;
+        for(String s : linesOfCode) {
+            s = s.trim(); 
+            if(!s.equals("}") && !s.equals("{") && !s.startsWith("//") && !s.startsWith("/*") && !s.startsWith("*/") && !s.isEmpty())
+                effLines++;   
+        }
+        return effLines;
+    }
+    
