@@ -9,52 +9,73 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-public class JavaMetric {
+public class JavaMetric implements CyclomaticMetric {
     
-    //Grabs code content from specified path into ArrayList.
-    public List<String> getCodeToList(String pathFile) throws FileNotFoundException, IOException {
-        List<String> linesOfCode = new ArrayList<>();
-        BufferedReader bufReader = new BufferedReader(new FileReader(pathFile));
-        String line = bufReader.readLine();
-        while(line != null) {
-            linesOfCode.add(line);
-            line = bufReader.readLine();
-        }
-        return linesOfCode;
-    }
-    
-    //Differentiates a line of code and squashed code
-    //Can be passed to calculateNoOfEffLines (does not accept empty lines) )
-    //First if statement removes comments, won't be added to output.
-    public List<String> getSortedCodeToList(List<String> linesOfCode) throws IOException {
-        List<String> output = new ArrayList<>();
-        for(String s : linesOfCode) {
-            if(!s.replaceAll(" ", "").startsWith("//")) {
-                String[] snippet = s.split("(?=[{}])|[;]");
-                for(String c : snippet)
-                    if(!c.trim().isEmpty())
-                        output.add(c.trim());
+    private String[] loopWords = {"for(", "while("};
+    private String[] exceptionWords = {"throws","catch"};
+    private String[] returnWords = {"return"};
+    private String[] conditionWords = {"if(", "elseif{", "switch("};
+
+    //The List<> parameter needs to be the return of getSortedCodeToList()
+    //Acceptable loops: for() while() do-while()
+    //Possible improvements: streams
+    @Override
+    public int calculateNoOfLoops(List<String> noOfLines) {
+        int noOfLoops = 0;
+        for(String s : noOfLines) {
+            for(String keyWord : loopWords) {
+                s = s.replaceAll(" ", "");
+                if(s.contains(keyWord) && !s.trim().startsWith("//"))
+                    noOfLoops++;
             }
         }
-        return output;
+        return noOfLoops;
     }
     
-    //Returns number of physical lines of code
-    public int calculateNoOfPhyLines(List<String> linesOfCode) {
-        return linesOfCode.size();
-    }
-    
-    //Returns number of Effective lines of code.
-    //Won't need to check empty lines if using getSortedCodeToList.
-    public int calculateNoOfEffLines(List<String> linesOfCode) {
-        int effLines = 0;
-        for(String s : linesOfCode) {
-            s = s.trim(); 
-            if(!s.equals("}") && !s.equals("{") && !s.startsWith("//") && !s.startsWith("/*") && !s.startsWith("*/") && !s.isEmpty())
-                effLines++;   
+     @Override
+     public int calculateNoOfExceptions(List<String> noOfLines) {
+        int noOfExceptions = 0;
+        for(String s : noOfLines) {
+            s = s.replaceAll(" ", "");
+            for(String keyWord : exceptionWords) {
+                if(s.contains(keyWord) && !s.trim().startsWith("//"))
+                    noOfExceptions++;
+            }
         }
-        return effLines;
+        return noOfExceptions;
     }
-
+    
+    //Need to test
+    //returns number of return statements
+    //Won't have to check for comments, as getSortedCodeToList ignores them.
+    @Override
+    public int calculateNoOfReturns(List<String> noOfLines) {
+      int noOfReturns = 0;
+        for(String s : noOfLines) {
+            s = s.replaceAll(" ", "");
+            for(String keyWord : returnWords) {
+                if(s.contains(keyWord) && !s.trim().startsWith("//"))
+                    noOfReturns++;
+            }
+        }
+        return noOfReturns;
+    }
+    
+    //Need to test
+    //returns number of conditions
+    //Acceptable Conditions: if, else-if, switch
+    //Possible improvements: ternary operator, 
+    @Override
+    public int calculateNoOfConditions(List<String> noOfLines) {
+        int noOfConditions = 0;
+        for(String s : noOfLines) {
+            s = s.replaceAll(" ", "");
+            for(String keyWord : conditionWords) {
+                if(s.contains(keyWord) && !s.trim().startsWith("//"))
+                    noOfConditions++;
+            }
+        }
+        return noOfConditions;
+    }
     
 }
