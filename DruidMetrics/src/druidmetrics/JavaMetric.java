@@ -159,6 +159,13 @@ public class JavaMetric implements MetricInterface{
                 // checks the line for reserved words
                 
                 line = line.replaceAll("\t", " "); // replaces tab character constants with a space
+                line = line.replaceAll("\b", " "); // replaces tab character constants with a space
+                line = line.replaceAll("\n", " "); // replaces tab character constants with a space
+                line = line.replaceAll("\f", " "); // replaces tab character constants with a space
+                line = line.replaceAll("\r", " "); // replaces tab character constants with a space
+                line = line.replaceAll("\"", " "); // replaces tab character constants with a space
+                line = line.replaceAll("\'", " "); // replaces tab character constants with a space
+                line = line.replaceAll("\\", " "); // replaces tab character constants with a space
                 
                 String[] wordsOnLine = line.split(" "); // Split line into seperate words
                                 
@@ -307,7 +314,14 @@ public class JavaMetric implements MetricInterface{
                 
                 
                 // checks the line for reserved words                
-                line = line.replaceAll("\t", " "); // replaces tab character constants with a space
+                line = line.replaceAll("\t", " "); // replaces tab character constants with a space                
+                line = line.replaceAll("\b", " "); // replaces tab character constants with a space                
+                line = line.replaceAll("\n", " "); // replaces tab character constants with a space                
+                line = line.replaceAll("\f", " "); // replaces tab character constants with a space                
+                line = line.replaceAll("\r", " "); // replaces tab character constants with a space                
+                line = line.replaceAll("\"", " "); // replaces tab character constants with a space                
+                line = line.replaceAll("\'", " "); // replaces tab character constants with a space                
+                line = line.replaceAll("\\", " "); // replaces tab character constants with a space
                 
                 // checks the line for identifiers                 
                 char[] charsOnLine = line.toCharArray(); // used to iterate
@@ -569,7 +583,14 @@ public class JavaMetric implements MetricInterface{
                 
                 // checks the line for reserved words
                 
-                line = line.replaceAll("\t", " "); // replaces tab character constants with a space
+                line = line.replaceAll("\t", " "); // replaces tab character constants with a space                
+                line = line.replaceAll("\b", " "); // replaces tab character constants with a space                
+                line = line.replaceAll("\n", " "); // replaces tab character constants with a space                
+                line = line.replaceAll("\f", " "); // replaces tab character constants with a space                
+                line = line.replaceAll("\r", " "); // replaces tab character constants with a space                
+                line = line.replaceAll("\"", " "); // replaces tab character constants with a space               
+                line = line.replaceAll("\'", " "); // replaces tab character constants with a space                
+                line = line.replaceAll("\\", " "); // replaces tab character constants with a space
                 
                 String[] wordsOnLine = line.split(" "); // Split line into seperate words
                                 
@@ -739,7 +760,14 @@ public class JavaMetric implements MetricInterface{
                 
                 
                 // checks the line for reserved words                
-                line = line.replaceAll("\t", " "); // replaces tab character constants with a space
+                line = line.replaceAll("\t", " "); // replaces tab character constants with a space                
+                line = line.replaceAll("\b", " "); // replaces tab character constants with a space               
+                line = line.replaceAll("\n", " "); // replaces tab character constants with a space                
+                line = line.replaceAll("\f", " "); // replaces tab character constants with a space              
+                line = line.replaceAll("\r", " "); // replaces tab character constants with a space              
+                line = line.replaceAll("\"", " "); // replaces tab character constants with a space              
+                line = line.replaceAll("\'", " "); // replaces tab character constants with a space              
+                line = line.replaceAll("\\", " "); // replaces tab character constants with a space                
                 
                 // checks the line for identifiers                 
                 char[] charsOnLine = line.toCharArray(); // used to iterate
