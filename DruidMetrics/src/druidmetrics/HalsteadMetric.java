@@ -12,10 +12,10 @@ import java.io.IOException;
  * @author Nico
  */
 public interface HalsteadMetric {
-    public int calculateNoOfOperands(String pathFile) throws IOException;    
-    public int calculateNoOfOperators(String pathFile);    
-    public int calculateNoOfUniqueOperands(String pathFile) throws IOException;    
-    public int calculateNoOfUniqueOperators(String pathFile);
+    public int calculateNoOfOperands() throws IOException;    
+    public int calculateNoOfOperators();    
+    public int calculateNoOfUniqueOperands() throws IOException;    
+    public int calculateNoOfUniqueOperators();
     
     public int calculateVocabularySize(int uniqueOperandAmount, int uniqueOperatorAmount);    
     public double calculateProgramLevel(double difficultyLevel);    
