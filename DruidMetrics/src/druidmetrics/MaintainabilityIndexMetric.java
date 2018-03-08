@@ -9,8 +9,8 @@ package druidmetrics;
  *
  * @author Nico
  */
-public interface MainainabilityIndexMetric {
-    public double calculateIndexWithoutComments(String pathfile);
-    public double calculateIndexCommentWeight(String pathfile);
-    public double calculateCommentPercentage(String pathfile);
+public interface MaintainabilityIndexMetric {
+    public double calculateIndexWithoutComments();
+    public double calculateIndexCommentWeight();
+    public double calculateCommentPercentage();
 }
