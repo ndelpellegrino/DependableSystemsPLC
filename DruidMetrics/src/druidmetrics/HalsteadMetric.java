@@ -18,11 +18,11 @@ public interface HalsteadMetric {
     public int calculateNoOfUniqueOperators(String pathFile);
     
     public int calculateVocabularySize(int uniqueOperandAmount, int uniqueOperatorAmount);    
-    public int calculateProgramLevel(double difficultyLevel);    
+    public double calculateProgramLevel(double difficultyLevel);    
     public int calculateProgramLength(int operandAmount, int operatorAmount);    
-    public int calculateImplementationTime(double effortToImplement);    
-    public int calculateVolume(int vocabularySize, int programLength);    
-    public int calculateEstimatedNoBugs(double effortToImplement);    
-    public int calculateDifficultyLevel(int uniqueOperatorAmount, int operandAmount, int uniqueOperandAmount);    
-    public int calculateEffortToImplement(double programVolume, double difficultyLevel);
+    public double calculateImplementationTime(double effortToImplement);    
+    public double calculateVolume(int vocabularySize, int programLength);    
+    public double calculateEstimatedNoBugs(double effortToImplement);    
+    public double calculateDifficultyLevel(int uniqueOperatorAmount, int operandAmount, int uniqueOperandAmount);    
+    public double calculateEffortToImplement(double programVolume, double difficultyLevel);
 }
