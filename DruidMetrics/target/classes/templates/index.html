@@ -1,0 +1,71 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <title>Welcome to DruidMetrics</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+        <link rel="stylesheet" href="/stylesheet.css" />
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    </head>
+    <body>
+        <nav class="navbar navbar-inner navbar-fixed-top navbar-inverse">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="/"><code>DruidMetrics</code></a>
+            </div>
+         <!--   <h3 class="text-center navbar-text"><code>DruidMetrics</code></h3> -->
+        </nav>
+        <div class="container">
+            <!--  <div>
+                  <h1 class="text-center"><code>DruidMetrics</code></h1>
+              </div> -->
+
+            <ul class="nav nav-pills nav-justified">
+                <li class="active"><a data-toggle="pill" href="#menu1"><span class="glyphicon glyphicon-upload"></span> Upload Code</a></li>
+                <li><a data-toggle="pill" href="#menu2"><span class="glyphicon glyphicon-paste"></span> Paste Code</a></li>
+            </ul>
+
+            <div class="tab-content">
+
+                <div id="menu1" class="tab-pane fade in active">
+                    <h2>Upload code</h2>
+                    <div class="well">
+                        <form method="POST" enctype="multipart/form-data" action="/result">
+                            <div class="form-group">
+                                <label>File to upload: </label><input type="file" name="file" />
+                            </div>
+                            <div class="form-group">
+                                <button class="btn btn-success" type="submit" value="Upload">Run Metrics</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <div id="menu2" class="tab-pane fade">
+                    <h2>Paste code</h2>
+                    <div class="well">
+                        <form method="POST" action="pasteResult">
+                            <div class="form-group">
+                                <div class="form-group">
+                                    <textarea class="form-control" name="code"></textarea>
+                                </div>
+                                <div>
+                                    <!-- <button class="btn btn-success" type="submit" value="Upload">Run Metrics</button> -->
+                                    <button class="btn btn-success">Run Metrics</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+
+
+
+
+
+
+        </div>
+    </body>
+
+</html>
