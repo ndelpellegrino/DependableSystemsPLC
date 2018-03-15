@@ -7,7 +7,8 @@ public class Main {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        // TODO code application logic here
+        JavaMetric newJavaMetric = new JavaMetric("C:\\Users\\Nico\\Documents\\NetBeansProjects\\DependableSystemsPLC\\DruidMetrics\\Test files\\Test file Halstead.txt");
+        System.out.println(newJavaMetric.calculateCommentPercentage());
     }
     
 }
