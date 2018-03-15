@@ -1177,27 +1177,41 @@ public class JavaMetric implements BaseMetric {
     public double calculateCommentPercentage(){
         String line;
         
-        double totalLines = 0;
-        double commentedLines = 0;
+        int totalLines = 0;
+        int commentedLines = 0;
         
         try(
             InputStream fis = new FileInputStream(pathFile);
             InputStreamReader isr = new InputStreamReader(fis, Charset.forName("UTF-8"));
             BufferedReader br = new BufferedReader(isr);
         ){  
+            boolean foundMultiComment = false;
+            
             // start reading file line by line            
-            while ((line = br.readLine()) != null) {   
-                totalLines++;
-                if(line.contains("//")){
+            while ((line = br.readLine()) != null) {                 
+                totalLines++; 
+                if(foundMultiComment){
+                    if(line.contains("*/")){
+                        commentedLines++;
+                        foundMultiComment = false;
+                    }
+                    else{
+                        commentedLines++;                        
+                    }
+                }
+                else if(line.contains("/*")){
+                    foundMultiComment = true;
+                    commentedLines++;
+                }
+                else if(line.contains("//")){
                     commentedLines++;
                 }
             }
         }
-        catch(Exception e){
-            
+        catch(Exception e){            
         }
         
-        return commentedLines / totalLines * 100;
+        return (double) commentedLines / (double) totalLines * 100;
     }
     
     public double calculateIndexWithoutComments(List<String> noOfLines){ 
